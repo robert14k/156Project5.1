@@ -1,0 +1,3 @@
+Main-Class: driver.InvoiceReport
+Manifest-Version: 1.0
+Sealed: false

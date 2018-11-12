@@ -1,0 +1,35 @@
+package driver;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import consoleWriter.ConsoleWriter;
+import datacontainers.Customer;
+import datacontainers.Invoice;
+import datacontainers.Person;
+import datacontainers.Product;
+import fileReader.FlatFileReader;
+import fileWriter.JsonWriter;
+
+public class InvoiceReport {
+
+	public static void main(String[] args) {
+		
+		FlatFileReader fr = new FlatFileReader();
+		
+		List<Person> personList = fr.readPersons();
+			
+		List<Customer> customerList = fr.readCusotmers(personList);
+		
+		List<Product> productList = fr.readProducts();
+		
+		List<Invoice> invoiceList = fr.readInvoice(personList, productList, customerList);
+		
+		ConsoleWriter cw = new ConsoleWriter();
+		
+		cw.InvoiceConsolePrinter(invoiceList);
+		//we will then need to create consol wrtier, it takes invoice list and argumetn and generates invoice report
+		//This will probs need an invoice writer class assositated with it
+	}
+
+}

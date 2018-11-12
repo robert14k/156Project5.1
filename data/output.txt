@@ -1,0 +1,82 @@
+=========================
+Executive Summary Report
+=========================
+Invoice    Customer                           Saleserson           Subtotal     Fees      Taxes   Discount   Total
+=====================================================================================================================================================
+INV001     Best Bye Door Sales       General  Chris Eccleston     $  130.18 $    0.00 $    6.02 $(   0.00) $  136.20
+INV002     IEEE UNL                  Student  David Tennant       $ 5817.24 $    6.75 $  342.92 $( 808.30) $ 5015.69
+INV003     Free Logic                General  Matt Smith          $  382.37 $    0.00 $   16.47 $(   0.00) $  398.84
+INV004     Weir Brokerage Firm       Student  Richard Hurndall    $    9.70 $    6.75 $    0.39 $(   1.16) $   15.29
+=====================================================================================================================================================
+TOTALS                                                            $ 6339.49 $   13.50 $  365.80 $( 809.46) $ 5566.01
+
+Individual Invoice Detail Reports
+==============================================
+Invoice INV001
+=============================
+Salesperson:  Chris Eccleston
+Customer Info:
+------------------------------------------
+Code      Item                                                          SubTotal   Taxes      Total
+fp12      MovieTicket - 'Venom' @ 1101 P Street                          $40.50     $2.43      $42.93
+          Oct 5,2018 18:00 (3/units @ 13.50 - Tue/Thu 7% off)
+3289      ParkingPass (3 units @ 28.00 with 3 free)                      $84.00     $3.36      $87.36
+ff23      A&W Root Beer-22oz (2 units @ 2.84  5% off if in advance)      $5.68      $0.23      $5.91
+                                                                         ==========================
+SUB-TOTALS                                                               $130.18   $6.02      $124.16
+TOTAL                                                                                         $124.16
+Invoice INV002
+=============================
+Salesperson:  David Tennant
+Customer Info:
+IEEE UNL C002
+Student
+ Tim Eveland
+186 Nebraska Hall
+Lincoln NE 68508 USA
+------------------------------------------
+Code      Item                                                          SubTotal   Taxes      Total
+b29e      SeasonPass - Special Screenings of Emoji Movie                 $5160.00   $309.60    $5469.60
+          (20/units @ 250.00 + $8 fee/unit)
+1239      MovieTicket - 'Barnyard' @ 1101 P Street                       $351.54    $21.09     $372.63
+          Sep 13,2018 19:30 (28/units @ 12.56 - Tue/Thu 7% off)
+90fa      ParkingPass (25 units @ 12.00 with 5 free)                     $60.00     $2.40      $62.40
+32f4      One M&M (4 units @ 1.43  5% off if in advance)                 $5.70      $0.23      $5.93
+                                                                         ==========================
+SUB-TOTALS                                                               $5817.24  $342.92    $5474.32
+DISCOUNT (8% Studnet & No Tax)                                                               ($808.30  )
+ADDITIONAL FEE (Student)                                                                      $6.75
+TOTAL                                                                                         $4672.77
+Invoice INV003
+=============================
+Salesperson:  Matt Smith
+Customer Info:
+------------------------------------------
+Code      Item                                                          SubTotal   Taxes      Total
+782g      MovieTicket - 'The Nun' @ 1101 P Street                        $75.33     $4.52      $79.85
+          Nov 10,2016 23:45 (6/units @ 12.56 - Tue/Thu 7% off)
+3y92      SeasonPass - Husker Win Deal                                   $-16.36    $-0.98     $-17.35
+          (5/units @ -11.27 + $8 fee/unit)
+3289      ParkingPass (3 units @ 28.00 with 3 free)                      $84.00     $3.36      $87.36
+yp23      Popcorn (6 units @ 39.90  5% off if in advance)                $239.40    $9.58      $248.98
+                                                                         ==========================
+SUB-TOTALS                                                               $382.37   $16.47     $365.89
+TOTAL                                                                                         $365.89
+Invoice INV004
+=============================
+Salesperson:  Richard Hurndall
+Customer Info:
+Weir Brokerage Firm C003
+Student
+ Donald Trump
+655 Shady Acres
+Lemoyne NE 69146 USA
+------------------------------------------
+Code      Item                                                          SubTotal   Taxes      Total
+90fb      ParkingPass (2 units @ 2.00 with 2 free)                       $4.00      $0.16      $4.16
+32f4      One M&M (4 units @ 1.43  5% off if in advance)                 $5.70      $0.23      $5.93
+                                                                         ==========================
+SUB-TOTALS                                                               $9.70     $0.39      $9.31
+DISCOUNT (8% Studnet & No Tax)                                                               ($1.16    )
+ADDITIONAL FEE (Student)                                                                      $6.75
+TOTAL                                                                                         $14.90
