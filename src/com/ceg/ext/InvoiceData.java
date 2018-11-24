@@ -1,5 +1,4 @@
-//package com.ceg.ext;
-package dbInteractions;
+package com.ceg.ext;
 
 /*
  * This is a collection of utility methods that define a general API for
@@ -14,7 +13,9 @@ public class InvoiceData {
 	/**
 	 * 1. Method that removes every person record from the database
 	 */
-	public static void removeAllPersons() {}
+	public static void removeAllPersons() {
+		//DELETE FROM PERSON WHERE PersonID is not null
+	}
 
 	/**
 	 * 2. Method to add a person record to the database with the provided data.
@@ -89,7 +90,7 @@ public class InvoiceData {
 
 	public static void addMovieTicketToInvoice(String invoiceCode, String productCode, int quantity) {}
 
-	/*
+	/**
 	 * 13. Adds a particular seasonpass (corresponding to <code>productCode</code>
 	 * to an invoice corresponding to the provided <code>invoiceCode</code> with
 	 * the given begin/end dates
