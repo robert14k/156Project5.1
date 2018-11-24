@@ -7,10 +7,19 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
+
 import datacontainers.Address;
 import datacontainers.Customer;
 import datacontainers.General;
+import datacontainers.MovieTicket;
+import datacontainers.ParkingPass;
 import datacontainers.Person;
+import datacontainers.Product;
+import datacontainers.Refreshment;
+import datacontainers.SeasonPass;
 import datacontainers.Student;
 import dbInteractions.dbConnection;
 
@@ -180,4 +189,69 @@ public class DBReader {
 	}
 	
 	
+	public ArrayList<Product> getProducts() {
+		ArrayList<Product> productList = new ArrayList<Product>();
+		Connection conn = dbConnection.getConnection();
+		PreparedStatement ps;
+		ResultSet rs;
+		String productQuery = "SELECT * FROM Products";
+		Address a = null;
+		String productCode;
+		
+		try
+		{
+			ps = conn.prepareStatement(productQuery);
+			rs = ps.executeQuery();
+		
+			while(rs.next()) {
+				productCode = rs.getString("ProductCode");
+				if(rs.getString("ProductType").equals("M")) {
+					DateTimeFormatter formatter = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm");
+					DateTime movieTime = formatter.parseDateTime(rs.getString("TimeMovie"));
+					String name = rs.getString("ProductName");
+					
+					a = getAddress(rs.getInt("AddressID"));
+					
+					
+					String screenNo = rs.getString("SeatNumber");
+					double price = rs.getDouble("ProductPrice");
+					
+					MovieTicket ticket = new MovieTicket(productCode, movieTime, name, a, screenNo, price);
+					
+					productList.add(ticket);
+					
+					
+				}else if(rs.getString("ProductType").equals("R")) {
+					String name = rs.getString("ProductName");
+					double price = rs.getDouble("ProductPrice");
+					
+					Refreshment refreshment = new Refreshment(productCode, name, price);
+					
+					productList.add(refreshment);
+					
+				}else if(rs.getString("ProductType").equals("S")) {
+					DateTimeFormatter formatterS = DateTimeFormat.forPattern("yyyy-mm-dd");
+					DateTime startTime = formatterS.parseDateTime(rs.getString("EventStart"));
+					DateTime endTime = formatterS.parseDateTime(rs.getString("EventEnd"));
+					String name = rs.getString("ProductName");
+					double price = rs.getDouble("ProductPrice");
+					
+					SeasonPass seasonPass= new SeasonPass(productCode, name, startTime, endTime, price);
+					productList.add(seasonPass);
+					
+				}else{
+					double price = rs.getDouble("ProductPrice");
+					ParkingPass parkingPass = new ParkingPass(productCode, price);
+				}	
+			}
+		}
+		catch (SQLException e)
+		{
+			System.out.println("SQLException: ");
+			e.printStackTrace();
+			throw new RuntimeException(e);
+		}
+	return productList;
+	}
 }
+

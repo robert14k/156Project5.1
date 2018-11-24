@@ -25,7 +25,8 @@ public class InvoiceReport {
 		//List<Customer> customerList = fr.readCusotmers(personList);
 		List<Customer> customerList = dbr.getCusotmers(personList);
 		
-		List<Product> productList = fr.readProducts();
+		//List<Product> productList = fr.readProducts();
+		List<Product> productList = dbr.getProducts();
 		
 		List<Invoice> invoiceList = fr.readInvoice(personList, productList, customerList);
 		
