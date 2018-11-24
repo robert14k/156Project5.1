@@ -8,7 +8,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import datacontainers.Address;
+import datacontainers.Customer;
+import datacontainers.General;
 import datacontainers.Person;
+import datacontainers.Student;
 import dbInteractions.dbConnection;
 
 public class DBReader {
@@ -63,28 +66,21 @@ public class DBReader {
 		ResultSet rs;
 		String addressQuery = "SELECT a.Address, a.City, a.State, z.ZipCode, c.Country FROM Address as a JOIN Zip as z on a.ZipID=z.ZipID JOIN Country as c on a.CountryID=c.CountryID WHERE a.AddressID=?";
 		String street, city, zip, country, state;
-		//need in order to return 
-//		street = null;
-//		city = null;
-//		country = null;
-//		state = null;
-//		zip = null;
-//		a = new Address(street, city, state, zip, country);
 		
 		try
 		{
 			ps = conn.prepareStatement(addressQuery);
 			ps.setInt(1, code);
 			rs = ps.executeQuery();
-			while(rs.next()){
-
-				street = rs.getString("Address");
-				city = rs.getString("City");
-				country = rs.getString("Country");
-				state = rs.getString("State");
-				zip = Integer.toString(rs.getInt("ZipCode"));
-				a = new Address(street, city, state, zip, country);
-			}
+			rs.next();
+			
+			street = rs.getString("Address");
+			city = rs.getString("City");
+			country = rs.getString("Country");
+			state = rs.getString("State");
+			zip = Integer.toString(rs.getInt("ZipCode"));
+			a = new Address(street, city, state, zip, country);
+			
 			rs.close();
 			ps.close();
 			conn.close();
@@ -99,5 +95,89 @@ public class DBReader {
 		
 		return a;
 	}
+	
+	public ArrayList<Customer> getCusotmers(List<Person> people) {
+	
+		ArrayList<Customer> customerList = new ArrayList<Customer>();
+		Connection conn = dbConnection.getConnection();
+		PreparedStatement ps;
+		ResultSet rs;
+		String customerQuery = "SELECT * FROM Customer";
+		Customer c;
+		Address a;
+		Person contact;
+		String customerCode;
+		String name;
+		
+		try
+		{
+			ps = conn.prepareStatement(customerQuery);
+			rs = ps.executeQuery();
+				
+		
+			while(rs.next()) {
+				customerCode = rs.getString("CustomerID");
+				name = rs.getString("CompanyName");
+				a = getAddress(rs.getInt("AddressID"));
+				contact = getPerson(rs.getInt("PersonID"));
+
+				if(rs.getString("CustomerType").equals("S")){
+					c = new Student(customerCode, contact, name, a);
+				}else {
+					c = new General(customerCode, contact, name, a);
+				}
+				customerList.add(c);
+			}
+		}
+		catch (SQLException e)
+		{
+			System.out.println("SQLException: ");
+			e.printStackTrace();
+			throw new RuntimeException(e);
+		}
+		
+		return customerList;
+	}
+	
+	
+	
+	public Person getPerson(int code) {
+		Address a = null;
+		Connection conn = dbConnection.getConnection();
+		PreparedStatement ps;
+		ResultSet rs;
+		String personQuery = "SELECT * FROM Person WHERE PersonID=?";
+		Person p = null;
+		String id, first, last;
+		int addressCode;
+		try
+		{
+			ps = conn.prepareStatement(personQuery);
+			ps.setInt(1, code);
+			rs = ps.executeQuery();
+			rs.next();
+			
+			id = rs.getString("PersonID");
+			first = rs.getString("PersonFirstName");
+			last = rs.getString("PersonLastName");
+			addressCode = rs.getInt("AddressID");
+			a = getAddress(addressCode);
+			p = new Person(id, first, last, a);
+			
+			rs.close();
+			ps.close();
+			conn.close();
+	
+		}
+		catch (SQLException e)
+		{
+			System.out.println("SQLException: ");
+			e.printStackTrace();
+			throw new RuntimeException(e);
+		}
+		
+		return p;
+	}
+	
 	
 }
