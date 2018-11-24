@@ -14,6 +14,7 @@ import org.joda.time.format.DateTimeFormatter;
 import datacontainers.Address;
 import datacontainers.Customer;
 import datacontainers.General;
+import datacontainers.Invoice;
 import datacontainers.MovieTicket;
 import datacontainers.ParkingPass;
 import datacontainers.Person;
@@ -242,6 +243,7 @@ public class DBReader {
 				}else{
 					double price = rs.getDouble("ProductPrice");
 					ParkingPass parkingPass = new ParkingPass(productCode, price);
+					productList.add(parkingPass);
 				}	
 			}
 		}
@@ -252,6 +254,42 @@ public class DBReader {
 			throw new RuntimeException(e);
 		}
 	return productList;
+	}
+	
+	
+	
+	public ArrayList<Invoice> getInvoice(List<Person> people, List<Product> products, List<Customer> customers){
+	
+		ArrayList<Invoice> invoiceList = new ArrayList<Invoice>();
+		//this will need to be ahcne to the linked list once tim is done with it!***********************^^^^^^^^^^^^^^^^^
+		Connection conn = dbConnection.getConnection();
+		PreparedStatement ps;
+		ResultSet rs;
+		String productQuery = "SELECT * FROM Invoice";
+		int invoiceID, customerID, salesPerosnID;
+		try
+		{
+			ps = conn.prepareStatement(productQuery);
+			rs = ps.executeQuery();
+			while(rs.next()) {
+				invoiceID = rs.getInt("InvoiceID");
+				customerID = rs.getInt("CustomerID");
+				salesPerosnID = rs.getInt("SalesPerson");
+				//ArrayList<Product> = 
+			//stuck here, pick up later.....................
+				
+			}
+			
+		}
+		catch (SQLException e)
+		{
+			System.out.println("SQLException: ");
+			e.printStackTrace();
+			throw new RuntimeException(e);
+		}
+		
+		
+		return invoiceList;
 	}
 }
 
