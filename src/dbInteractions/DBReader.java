@@ -261,11 +261,13 @@ public class DBReader {
 	public ArrayList<Invoice> getInvoice(List<Person> people, List<Product> products, List<Customer> customers){
 	
 		ArrayList<Invoice> invoiceList = new ArrayList<Invoice>();
+		ArrayList<Product> invoiceProducts = null;
 		//this will need to be ahcne to the linked list once tim is done with it!***********************^^^^^^^^^^^^^^^^^
 		Connection conn = dbConnection.getConnection();
 		PreparedStatement ps;
 		ResultSet rs;
 		String productQuery = "SELECT * FROM Invoice";
+		Invoice invoice = null;
 		int invoiceID, customerID, salesPerosnID;
 		try
 		{
@@ -275,8 +277,10 @@ public class DBReader {
 				invoiceID = rs.getInt("InvoiceID");
 				customerID = rs.getInt("CustomerID");
 				salesPerosnID = rs.getInt("SalesPerson");
-				//ArrayList<Product> = 
-			//stuck here, pick up later.....................
+				
+				invoiceProducts = getInvoiceProducts(invoiceID)); 
+				invoice = new Invoice(invoiceCode, invoiceTime, customer, sp, invoiceProducts);
+				
 				
 			}
 			
@@ -291,5 +295,76 @@ public class DBReader {
 		
 		return invoiceList;
 	}
+	
+	public ArrayList<Product> getInvoiceProducts(int invoiceID) {
+		ArrayList<Product> productList = new ArrayList<Product>();
+		Connection conn = dbConnection.getConnection();
+		PreparedStatement ps;
+		ResultSet rs, rs2;
+		String productQuery = "SELECT ProductID FROM InvoiceProduct WHERE InvoiceID = ?";
+		Address a = null;
+		String productCode;
+		
+		try
+		{
+			ps = conn.prepareStatement(productQuery);
+			ps.setInt(1, invoiceID);
+			rs = ps.executeQuery();
+		
+			while(rs.next()) {
+				ps = conn.prepareStatement("SELECT * FROM Products WHERE ProductID = ?");
+				ps.setInt(1, rs.getInt("ProductID"));
+				rs2 = ps.executeQuery();
+				productCode = rs2.getString("ProductCode");
+				if(rs2.getString("ProductType").equals("M")) {
+					DateTimeFormatter formatter = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm");
+					DateTime movieTime = formatter.parseDateTime(rs2.getString("TimeMovie"));
+					String name = rs2.getString("ProductName");
+					
+					a = getAddress(rs2.getInt("AddressID"));
+					
+					
+					String screenNo = rs2.getString("SeatNumber");
+					double price = rs2.getDouble("ProductPrice");
+					
+					MovieTicket ticket = new MovieTicket(productCode, movieTime, name, a, screenNo, price);
+					
+					productList.add(ticket);
+					
+					
+				}else if(rs2.getString("ProductType").equals("R")) {
+					String name = rs2.getString("ProductName");
+					double price = rs2.getDouble("ProductPrice");
+					
+					Refreshment refreshment = new Refreshment(productCode, name, price);
+					
+					productList.add(refreshment);
+					
+				}else if(rs2.getString("ProductType").equals("S")) {
+					DateTimeFormatter formatterS = DateTimeFormat.forPattern("yyyy-mm-dd");
+					DateTime startTime = formatterS.parseDateTime(rs2.getString("EventStart"));
+					DateTime endTime = formatterS.parseDateTime(rs2.getString("EventEnd"));
+					String name = rs2.getString("ProductName");
+					double price = rs2.getDouble("ProductPrice");
+					
+					SeasonPass seasonPass= new SeasonPass(productCode, name, startTime, endTime, price);
+					productList.add(seasonPass);
+					
+				}else{
+					double price = rs2.getDouble("ProductPrice");
+					ParkingPass parkingPass = new ParkingPass(productCode, price);
+					productList.add(parkingPass);
+				}	
+			}
+		}
+		catch (SQLException e)
+		{
+			System.out.println("SQLException: ");
+			e.printStackTrace();
+			throw new RuntimeException(e);
+		}
+	return productList;
+	}
+	
 }
 

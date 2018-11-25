@@ -38,8 +38,6 @@ public class InvoiceData {
 	 * @param zip
 	 * @param country
 	 */
-	//INSERT INTO `Address` (`AddressID`, `Address`, `City`, `State`, `ZipID`, `CountryID`) VALUES (021, "1111West11th Street", 'Ogallala', 'Nebraska', 001, 001);
-	// INSERT INTO `Person` (`PersonID`, `PersonLastName`, `PersonFirstName`, `AddressID`) VALUES (021, 'Parker', 'Peter', 021);
 	public static void addPerson(String personCode, String firstName, String lastName, String street, String city, String state, String zip, String country) {
 		
 		try {
