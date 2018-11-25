@@ -268,6 +268,8 @@ public class DBReader {
 		ResultSet rs;
 		String productQuery = "SELECT * FROM Invoice";
 		Invoice invoice = null;
+		String invoiceCode;
+		DateTime invoiceTime;
 		int invoiceID, customerID, salesPerosnID;
 		try
 		{
@@ -277,13 +279,13 @@ public class DBReader {
 				invoiceID = rs.getInt("InvoiceID");
 				customerID = rs.getInt("CustomerID");
 				salesPerosnID = rs.getInt("SalesPerson");
-				
-				invoiceProducts = getInvoiceProducts(invoiceID)); 
+				invoiceProducts = getInvoiceProducts(invoiceID);
+				DateTimeFormatter formatter = DateTimeFormat.forPattern("yyyy-mm-dd");
+				invoiceTime = formatter.parseDateTime(rs.getString("InvoiceDate"));
+				//still need to find person and cusomter, then this will be done excpet ofr the fany stuff in the getinvoiceproducts that deasl with the weird buisness rules and the withmovie or not
 				invoice = new Invoice(invoiceCode, invoiceTime, customer, sp, invoiceProducts);
-				
-				
+				invoiceList.add(invoice);
 			}
-			
 		}
 		catch (SQLException e)
 		{
@@ -310,7 +312,7 @@ public class DBReader {
 			ps = conn.prepareStatement(productQuery);
 			ps.setInt(1, invoiceID);
 			rs = ps.executeQuery();
-		
+		 
 			while(rs.next()) {
 				ps = conn.prepareStatement("SELECT * FROM Products WHERE ProductID = ?");
 				ps.setInt(1, rs.getInt("ProductID"));
