@@ -15,7 +15,7 @@ public class InvoiceData {
 	 */
 	public static void removeAllPersons() {
 		//DELETE FROM PERSON WHERE PersonID is not null
-		//DELETE FROM PERSON WHERE PERSONID <> NULL
+		//DELETE FROM PERSON WHERE PERSONID <> NULL;
 	}
 
 	/**
@@ -48,7 +48,7 @@ public class InvoiceData {
 	/**
 	 * 4. Method that removes every customer record from the database
 	 */
-	// DELETE FROM CUSTOMERS WHERE CUSTOMERID <> NULL
+	// DELETE FROM CUSTOMERS WHERE CUSTOMERID <> NULL;
 	public static void removeAllCustomers() {}
 
 	public static void addCustomer(String customerCode, String customerType, String primaryContactPersonCode,String name, String street, String city, String state, String zip, String country) {}
@@ -56,36 +56,43 @@ public class InvoiceData {
 	/**
 	 * 5. Removes all product records from the database
 	 */
+	//DEELTE FROM PRODUCTS WHERE PRODUCTID <> NULL;
 	public static void removeAllProducts() {}
 
 	/**
 	 * 6. Adds an movieTicket record to the database with the provided data.
 	 */
+	//INSERT INTO `Products` (`ProductID`, `ProductCode`, `ProductType`, `ProductName`, `TimeMovie`, `AddressID`, `SeatNumber`, `EventStart`, `EventEnd`, `ProductPrice`) VALUES (013, 'fp12', 'M', 'Movie', '2018-10-5 18:00', 027, '3A', NULL, NULL, 13.50);
 	public static void addMovieTicket(String productCode, String dateTime, String movieName, String street, String city,String state, String zip, String country, String screenNo, double pricePerUnit) {}
 
 	/**
 	 * 7. Adds a seasonPass record to the database with the provided data.
 	 */
+	//INSERT INTO `Products` (`ProductID`, `ProductCode`, `ProductType`, `ProductName`, `TimeMovie`, `AddressID`, `SeatNumber`, `EventStart`, `EventEnd`, `ProductPrice`) VALUES (014, 'xer4', 'S', 'Season Pass', NULL, NULL, NULL, '2018-10-12', '2018-10-16', 100.00);
 	public static void addSeasonPass(String productCode, String name, String seasonStartDate, String seasonEndDate,	double cost) {}
 
 	/**
 	 * 8. Adds a ParkingPass record to the database with the provided data.
 	 */
+	//INSERT INTO `Products` (`ProductID`, `ProductCode`, `ProductType`, `ProductName`, `TimeMovie`, `AddressID`, `SeatNumber`, `EventStart`, `EventEnd`, `ProductPrice`) VALUES (015, '90fa', 'P', NULL, NULL, NULL, NULL, NULL, NULL, 12.00);
 	public static void addParkingPass(String productCode, double parkingFee) {}
 
 	/**
 	 * 9. Adds a refreshment record to the database with the provided data.
 	 */
+	//INSERT INTO `Products` (`ProductID`, `ProductCode`, `ProductType`, `ProductName`, `TimeMovie`, `AddressID`, `SeatNumber`, `EventStart`, `EventEnd`, `ProductPrice`) VALUES (015, '32f4', 'R', 'Refreshment', NULL, NULL, NULL, NULL, NULL, 1.50);
 	public static void addRefreshment(String productCode, String name, double cost) {}
 
 	/**
 	 * 10. Removes all invoice records from the database
 	 */
+	// REMOVE FROM INVOICE WHERE INVOICEID <> NULL;
 	public static void removeAllInvoices() {}
 
 	/**
 	 * 11. Adds an invoice record to the database with the given data.
 	 */
+	//INSERT INTO `Invoice` (`InvoiceID`, `CustomerID`, `InvoiceDate`) VALUES (005, 001, '2018-11-21');
 	public static void addInvoice(String invoiceCode, String customerCode, String salesPersonCode, String invoiceDate) {}
 
 	/**
