@@ -4,7 +4,7 @@ package com.ceg.ext;
  * This is a collection of utility methods that define a general API for
  * interacting with the database supporting this application.
  * 15 methods in total, add more if required.
- * Donot change any method signatures or the package name.
+ * Do not change any method signatures or the package name.
  * 
  */
 
@@ -15,10 +15,12 @@ public class InvoiceData {
 	 */
 	public static void removeAllPersons() {
 		//DELETE FROM PERSON WHERE PersonID is not null
+		//DELETE FROM PERSON WHERE PERSONID <> NULL
 	}
 
 	/**
 	 * 2. Method to add a person record to the database with the provided data.
+	 * 
 	 * 
 	 * @param personCode
 	 * @param firstName
@@ -29,6 +31,8 @@ public class InvoiceData {
 	 * @param zip
 	 * @param country
 	 */
+	//INSERT INTO `Address` (`AddressID`, `Address`, `City`, `State`, `ZipID`, `CountryID`) VALUES (021, "1111West11th Street", 'Ogallala', 'Nebraska', 001, 001);
+	// INSERT INTO `Person` (`PersonID`, `PersonLastName`, `PersonFirstName`, `AddressID`) VALUES (021, 'Parker', 'Peter', 021);
 	public static void addPerson(String personCode, String firstName, String lastName, String street, String city, String state, String zip, String country) {}
 
 	/**
@@ -38,11 +42,13 @@ public class InvoiceData {
 	 * @param personCode
 	 * @param email
 	 */
+	//INSERT INTO `Email` (`EmailID`, `PersonID`, `EmailAddress`) VALUES (031, 021, 'email@email.com');
 	public static void addEmail(String personCode, String email) {}
 
 	/**
 	 * 4. Method that removes every customer record from the database
 	 */
+	// DELETE FROM CUSTOMERS WHERE CUSTOMERID <> NULL
 	public static void removeAllCustomers() {}
 
 	public static void addCustomer(String customerCode, String customerType, String primaryContactPersonCode,String name, String street, String city, String state, String zip, String country) {}
