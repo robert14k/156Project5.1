@@ -1,5 +1,12 @@
 package com.ceg.ext;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.Statement;
+
+import dbInteractions.dbConnection;
+
 /*
  * This is a collection of utility methods that define a general API for
  * interacting with the database supporting this application.
@@ -33,8 +40,70 @@ public class InvoiceData {
 	 */
 	//INSERT INTO `Address` (`AddressID`, `Address`, `City`, `State`, `ZipID`, `CountryID`) VALUES (021, "1111West11th Street", 'Ogallala', 'Nebraska', 001, 001);
 	// INSERT INTO `Person` (`PersonID`, `PersonLastName`, `PersonFirstName`, `AddressID`) VALUES (021, 'Parker', 'Peter', 021);
-	public static void addPerson(String personCode, String firstName, String lastName, String street, String city, String state, String zip, String country) {}
-
+	public static void addPerson(String personCode, String firstName, String lastName, String street, String city, String state, String zip, String country) {
+		
+		try {
+			Connection conn = dbConnection.getConnection();
+			PreparedStatement ps = conn.prepareStatement("SELECT ZipID FROM Zip WHERE ZipCode = ?");
+			ps.setInt(1, Integer.parseInt(zip));
+			ResultSet rs = ps.executeQuery();
+			int zipID, countryID;
+			if(rs.next()) {
+				zipID = rs.getInt("ZipID");
+			} else {
+				ps = conn.prepareStatement("INSERT INTO Zip (ZipCode) VALUES (?)");
+				ps.setInt(1, Integer.parseInt(zip));
+				rs = ps.executeQuery();
+				
+				ps = conn.prepareStatement("SELECT ZipID FROM Zip WHERE ZipCode = ?");
+				ps.setInt(1, Integer.parseInt(zip));
+				rs = ps.executeQuery();
+				rs.next();
+				zipID = rs.getInt("ZipID");
+			}
+			ps = conn.prepareStatement("SELECT CountryID FROM Country WHERE Country = ?");
+			ps.setInt(1, Integer.parseInt(zip));
+			rs = ps.executeQuery();
+			if(rs.next()) {
+				countryID = rs.getInt("CountryID");
+			} else {
+				ps = conn.prepareStatement("INSERT INTO Country (Country) VALUES (?)");
+				ps.setString(1, country);
+				rs = ps.executeQuery();
+				ps = conn.prepareStatement("SELECT CountryID FROM Country WHERE Country = ?");
+				ps.setString(1, country);
+				rs = ps.executeQuery();
+				countryID = rs.getInt("CountryID");
+			}
+			ps = conn.prepareStatement("INSERT INTO `Address` (`Address`, `City`, `State`, `ZipID`, `CountryID`) VALUES (?, ?, ?, ?, ?)");
+			ps.setString(1, street);
+			ps.setString(2, city);
+			ps.setString(3, state);
+			ps.setInt(4, zipID);
+			ps.setInt(5, countryID);
+			ps.executeUpdate();
+			
+			//get the address ID so I can add it to the person comit to the db
+			ps = conn.prepareStatement("SELECT CountryID FROM Country WHERE Country = ?");
+			ps.setString(1, state);
+			rs = ps.executeQuery();
+			int addressID = rs.getInt("CountryID");
+			
+			ps = conn.prepareStatement("INSERT INTO `Person` (PersonLastName, PersonFirstName, AddressID, PersonCode ) VALUES (?, ?, ?, ?)");
+			ps.setString(1, lastName);
+			ps.setString(2, firstName);
+			ps.setInt(3, addressID);
+			ps.setString(4, personCode);
+			ps.executeUpdate();
+			
+    		rs.close();
+    		ps.close();
+    	} catch (Exception e) {
+    		e.printStackTrace();
+    	}
+	}
+	
+		
 	/**
 	 * 3. Adds an email record corresponding person record corresponding to the
 	 * provided <code>personCode</code>
