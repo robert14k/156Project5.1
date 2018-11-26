@@ -139,6 +139,9 @@ public class DBReader {
 				}
 				customerList.add(c);
 			}
+			rs.close();
+			ps.close();
+			conn.close();
 		}
 		catch (SQLException e)
 		{
@@ -247,6 +250,9 @@ public class DBReader {
 					productList.add(parkingPass);
 				}	
 			}
+			rs.close();
+			ps.close();
+			conn.close();
 		}
 		catch (SQLException e)
 		{
@@ -269,11 +275,11 @@ public class DBReader {
 		ResultSet rs, rs2, rs3;
 		String productQuery = "SELECT * FROM Invoice";
 		Invoice invoice = null;
-		String invoiceCode;
+		String invoiceCode, customerCode;
 		DateTime invoiceTime;
 		Customer customer = null;
 		Person sp = null;
-		int invoiceID, customerID, salesPerosnID;
+		int invoiceID, customerID, salesPersonID;
 		try
 		{
 			ps = conn.prepareStatement(productQuery);
@@ -282,23 +288,30 @@ public class DBReader {
 				invoiceID = rs.getInt("InvoiceID");
 				invoiceCode = rs.getString("InvoiceCode");
 				customerID = rs.getInt("CustomerID");
-				salesPerosnID = rs.getInt("SalesPerson");
-				invoiceProducts = getInvoiceProducts(invoiceID);
+				salesPersonID = rs.getInt("SalesPerson");
+				invoiceProducts = getInvoiceProducts(invoiceID, products);
 				DateTimeFormatter formatter = DateTimeFormat.forPattern("yyyy-mm-dd");
 				invoiceTime = formatter.parseDateTime(rs.getString("InvoiceDate"));
-				ps = conn.prepareStatement("SELECT CutomerCode FROM Customers WHERE CuzotmerID = ?");
-				ps.setInt(1, rs.getInt("CustomerID"));
+				ps = conn.prepareStatement("SELECT CustomerCode FROM Customer WHERE CustomerID = ?");
+				ps.setInt(1, customerID);
 				rs2 = ps.executeQuery();
-				customer = FlatFileReader.codeGetCustomer(rs2.getString("CustomerCode"), customers);
-				ps = conn.prepareStatement("SELECT CutomerCode FROM Customers WHERE CuzotmerID = ?");
-				ps.setInt(1, rs.getInt("SalesPerson"));
+				customerCode = rs2.getString("CustomerCode");
+				System.out.println(customerCode);
+				customer = FlatFileReader.codeGetCustomer(customerCode, customers);
+				ps = conn.prepareStatement("SELECT PersonCode FROM Person WHERE PersonID = ?");
+				ps.setInt(1, salesPersonID);
 				rs3 = ps.executeQuery();
-				sp = FlatFileReader.codeGetPerson(rs3.getString("CustomerCode"), people);
+				sp = FlatFileReader.codeGetPerson(rs3.getString("PersonCode"), people);
 				
 				//still need to find person and cusomter, then this will be done excpet ofr the fany stuff in the getinvoiceproducts that deasl with the weird buisness rules and the withmovie or not
 				invoice = new Invoice(invoiceCode, invoiceTime, customer, sp, invoiceProducts);
 				invoiceList.add(invoice);
+				rs2.close();
+				rs3.close();
 			}
+			rs.close();
+			ps.close();
+			conn.close();
 		}
 		catch (SQLException e)
 		{
@@ -311,11 +324,11 @@ public class DBReader {
 		return invoiceList;
 	}
 	
-	public ArrayList<Product> getInvoiceProducts(int invoiceID) {
+	public ArrayList<Product> getInvoiceProducts(int invoiceID, List<Product> products) {
 		ArrayList<Product> productList = new ArrayList<Product>();
 		Connection conn = dbConnection.getConnection();
 		PreparedStatement ps;
-		ResultSet rs, rs2, rs3;
+		ResultSet rs, rs2, rs3, rs4;
 		String productQuery = "SELECT ProductID FROM InvoiceProduct WHERE InvoiceID = ?";
 		Address a = null;
 		String productCode;
@@ -334,6 +347,7 @@ public class DBReader {
 				ps = conn.prepareStatement("SELECT * FROM InvoiceProduct WHERE ProductID = ?");
 				ps.setInt(1, rs.getInt("ProductID"));
 				rs3 = ps.executeQuery();
+				String subCode;
 				
 				if(rs2.getString("ProductType").equals("M")) {
 					DateTimeFormatter formatter = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm");
@@ -347,7 +361,7 @@ public class DBReader {
 					double price = rs2.getDouble("ProductPrice");
 					
 					MovieTicket ticket = new MovieTicket(productCode, movieTime, name, a, screenNo, price);
-					
+					ticket.setAmount(rs3.getInt("QuanitityOne"));
 					productList.add(ticket);
 					
 					
@@ -356,7 +370,10 @@ public class DBReader {
 					double price = rs2.getDouble("ProductPrice");
 					
 					Refreshment refreshment = new Refreshment(productCode, name, price);
-					
+					refreshment.setAmount(rs3.getInt("QuanitityOne"));
+					if(rs3.getString("SubProduct") != null) {
+						refreshment.isWithTicket();
+					}
 					productList.add(refreshment);
 					
 				}else if(rs2.getString("ProductType").equals("S")) {
@@ -367,14 +384,31 @@ public class DBReader {
 					double price = rs2.getDouble("ProductPrice");
 					
 					SeasonPass seasonPass= new SeasonPass(productCode, name, startTime, endTime, price);
+					seasonPass.setAmount(rs3.getInt("QuanitityOne"));
 					productList.add(seasonPass);
 					
 				}else{
 					double price = rs2.getDouble("ProductPrice");
 					ParkingPass parkingPass = new ParkingPass(productCode, price);
+					parkingPass.setAmount(rs3.getInt("QuanitityOne"));
+					if((subCode = rs3.getString("SubProduct")) != null) {
+						parkingPass.isWithTicket();
+						//parkingPass.setAmount(FlatFileReader.codeGetProduct(subCode, products).getAmount());
+						ps = conn.prepareStatement("SELECT QuanityOne FROM InvoiceProduct AS ip JOIN Products AS p ON ip.ProductID=p.ProductID WHERE p.ProductCode = ?");
+						ps.setString(1, subCode);
+						rs4 = ps.executeQuery();
+						parkingPass.setAmount(rs4.getInt("QuanitytOne"));
+						rs4.close();
+						
+					}
 					productList.add(parkingPass);
-				}	
+				}
+				rs2.close();
+				rs3.close();
 			}
+			rs.close();
+			ps.close();
+			conn.close();
 		}
 		catch (SQLException e)
 		{

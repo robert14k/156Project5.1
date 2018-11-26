@@ -28,7 +28,8 @@ public class InvoiceReport {
 		//List<Product> productList = fr.readProducts();
 		List<Product> productList = dbr.getProducts();
 		
-		List<Invoice> invoiceList = fr.readInvoice(personList, productList, customerList);
+		//List<Invoice> invoiceList = fr.readInvoice(personList, productList, customerList);
+		List<Invoice> invoiceList = dbr.getInvoice(personList, productList, customerList);
 		
 		ConsoleWriter cw = new ConsoleWriter();
 		
