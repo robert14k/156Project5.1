@@ -230,7 +230,7 @@ public class InvoiceData {
 	 * 6. Adds an movieTicket record to the database with the provided data.
 	 */
 	//INSERT INTO `Products` (`ProductID`, `ProductCode`, `ProductType`, `ProductName`, `TimeMovie`, `AddressID`, `SeatNumber`, `EventStart`, `EventEnd`, `ProductPrice`) VALUES (013, 'fp12', 'M', 'Movie', '2018-10-5 18:00', 027, '3A', NULL, NULL, 13.50);
-	public static void addMovieTicket( String ProductID, String productCode, String dateTime, String movieName, String street, String city,String state, String zip, String country, String screenNo, double pricePerUnit) 
+	public static void addMovieTicket( String ProductID, String productCode, String dateTime, String movieName, String street, String city,String state, String zip, String country, String screenNo, double pricePerUnit) {
 		try {
 				Connection conn = dbConnection.getConnection(); 
 				PreparedStatement ps = conn.prepareStatement("SELECT ProductID FROM Product WHERE ProductType = M");
@@ -267,10 +267,14 @@ public class InvoiceData {
 				ps.setString(10, screenNo);
 				ps.setDouble(11, pricePerUnit);
 				ps.executeUpdate();
-						
-		rs.close();
-		ps.close();
-    	} 
+				ps.executeUpdate();
+				
+	    		rs.close();
+	    		ps.close();
+	    	} catch (Exception e) {
+	    		e.printStackTrace();
+	    	}
+		}
 	/**
 	 * 7. Adds a seasonPass record to the database with the provided data.
 	 */
@@ -293,7 +297,29 @@ public class InvoiceData {
 	 * 10. Removes all invoice records from the database
 	 */
 	// REMOVE FROM INVOICE WHERE INVOICEID <> NULL;
-	public static void removeAllInvoices() {}
+	public static void removeAllInvoices(String InvoiceID) {
+	try {
+		Connection conn = dbConnection.getConnection();
+		PreparedStatement ps = conn.prepareStatement("SELECT InvoiceID FROM Invoice");
+		ps.setInt(1, Integer.parseInt(InvoiceID));
+		ResultSet rs = ps.executeQuery();
+		int invoice;
+		if(rs.next()) {
+			invoice = rs.getInt("invoice");
+		} else {
+			ps = conn.prepareStatement("Delete from Invoice");
+			ps.setInt(1, Integer.parseInt(InvoiceID));
+			rs = ps.executeQuery();
+			ps.executeUpdate();
+			
+    		rs.close();
+    		ps.close();
+    	} 
+	}
+		catch (Exception e) {
+    		e.printStackTrace();
+    	}
+}
 
 	/**
 	 * 11. Adds an invoice record to the database with the given data.
