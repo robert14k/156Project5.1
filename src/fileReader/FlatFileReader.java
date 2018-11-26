@@ -175,7 +175,7 @@ public class FlatFileReader {
 		}
 	}
 	
-	public Person codeGetPerson(String code, List<Person> people) {
+	public static Person codeGetPerson(String code, List<Person> people) {
 		for(Person a: people) {
 			if(code.equals(a.getPersonCode())) {
 				return a;
@@ -260,7 +260,7 @@ public class FlatFileReader {
 		}
 	}
 	
-	public Customer codeGetCustomer(String code, List<Customer> people) {
+	public static Customer codeGetCustomer(String code, List<Customer> people) {
 		for(Customer a: people) {
 			if(code.equals(a.getCustomerCode())) {
 				return a;
@@ -271,7 +271,7 @@ public class FlatFileReader {
 		return blank;
 		
 	}
-	public Product codeGetProduct(String code, List<Product> products) {
+	public static Product codeGetProduct(String code, List<Product> products) {
 		for(Product a: products) {
 			if(code.equals(a.getProductCode())) {
 				return a;

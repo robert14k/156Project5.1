@@ -23,6 +23,7 @@ import datacontainers.Refreshment;
 import datacontainers.SeasonPass;
 import datacontainers.Student;
 import dbInteractions.dbConnection;
+import fileReader.FlatFileReader;
 
 public class DBReader {
 	
@@ -265,11 +266,13 @@ public class DBReader {
 		//this will need to be ahcne to the linked list once tim is done with it!***********************^^^^^^^^^^^^^^^^^
 		Connection conn = dbConnection.getConnection();
 		PreparedStatement ps;
-		ResultSet rs;
+		ResultSet rs, rs2, rs3;
 		String productQuery = "SELECT * FROM Invoice";
 		Invoice invoice = null;
 		String invoiceCode;
 		DateTime invoiceTime;
+		Customer customer = null;
+		Person sp = null;
 		int invoiceID, customerID, salesPerosnID;
 		try
 		{
@@ -277,11 +280,21 @@ public class DBReader {
 			rs = ps.executeQuery();
 			while(rs.next()) {
 				invoiceID = rs.getInt("InvoiceID");
+				invoiceCode = rs.getString("InvoiceCode");
 				customerID = rs.getInt("CustomerID");
 				salesPerosnID = rs.getInt("SalesPerson");
 				invoiceProducts = getInvoiceProducts(invoiceID);
 				DateTimeFormatter formatter = DateTimeFormat.forPattern("yyyy-mm-dd");
 				invoiceTime = formatter.parseDateTime(rs.getString("InvoiceDate"));
+				ps = conn.prepareStatement("SELECT CutomerCode FROM Customers WHERE CuzotmerID = ?");
+				ps.setInt(1, rs.getInt("CustomerID"));
+				rs2 = ps.executeQuery();
+				customer = FlatFileReader.codeGetCustomer(rs2.getString("CustomerCode"), customers);
+				ps = conn.prepareStatement("SELECT CutomerCode FROM Customers WHERE CuzotmerID = ?");
+				ps.setInt(1, rs.getInt("SalesPerson"));
+				rs3 = ps.executeQuery();
+				sp = FlatFileReader.codeGetPerson(rs3.getString("CustomerCode"), people);
+				
 				//still need to find person and cusomter, then this will be done excpet ofr the fany stuff in the getinvoiceproducts that deasl with the weird buisness rules and the withmovie or not
 				invoice = new Invoice(invoiceCode, invoiceTime, customer, sp, invoiceProducts);
 				invoiceList.add(invoice);
@@ -302,7 +315,7 @@ public class DBReader {
 		ArrayList<Product> productList = new ArrayList<Product>();
 		Connection conn = dbConnection.getConnection();
 		PreparedStatement ps;
-		ResultSet rs, rs2;
+		ResultSet rs, rs2, rs3;
 		String productQuery = "SELECT ProductID FROM InvoiceProduct WHERE InvoiceID = ?";
 		Address a = null;
 		String productCode;
@@ -318,6 +331,10 @@ public class DBReader {
 				ps.setInt(1, rs.getInt("ProductID"));
 				rs2 = ps.executeQuery();
 				productCode = rs2.getString("ProductCode");
+				ps = conn.prepareStatement("SELECT * FROM InvoiceProduct WHERE ProductID = ?");
+				ps.setInt(1, rs.getInt("ProductID"));
+				rs3 = ps.executeQuery();
+				
 				if(rs2.getString("ProductType").equals("M")) {
 					DateTimeFormatter formatter = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm");
 					DateTime movieTime = formatter.parseDateTime(rs2.getString("TimeMovie"));
