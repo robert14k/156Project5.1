@@ -279,20 +279,128 @@ public class InvoiceData {
 	 * 7. Adds a seasonPass record to the database with the provided data.
 	 */
 	//INSERT INTO `Products` (`ProductID`, `ProductCode`, `ProductType`, `ProductName`, `TimeMovie`, `AddressID`, `SeatNumber`, `EventStart`, `EventEnd`, `ProductPrice`) VALUES (014, 'xer4', 'S', 'Season Pass', NULL, NULL, NULL, '2018-10-12', '2018-10-16', 100.00);
-	public static void addSeasonPass(String productCode, String name, String seasonStartDate, String seasonEndDate,	double cost) {}
+	public static void addSeasonPass(String ProductID, String productCode, String name, String seasonStartDate, String seasonEndDate,	double cost) {
+	try {
+		Connection conn = dbConnection.getConnection(); 
+		PreparedStatement ps = conn.prepareStatement("SELECT ProductID FROM Product WHERE ProductType = S");
+		ps.setInt(1,  Integer.parseInt(ProductID));
+		ResultSet rs = ps.executeQuery();
+		int product;
+		if(rs.next()) {
+			product = rs.getInt("product");
+		} else {
+			ps = conn.prepareStatement("INSERT INTO Product (ProductID) VALUES (?)");
+			ps.setInt(1, Integer.parseInt(ProductID));
+			rs = ps.executeQuery();
+			
+			ps = conn.prepareStatement("SELECT ProductID FROM Product WHERE ProductCode = ?");
+			ps.setInt(1, Integer.parseInt(ProductID));
+			rs = ps.executeQuery();
+			rs.next();
+			product = rs.getInt("product");
+		}
+		ps = conn.prepareStatement("SELECT ProductID FROM Product WHERE ProductType = ?");
+		ps.setInt(1, Integer.parseInt(ProductID));
+		rs = ps.executeQuery();
 
+		ps = conn.prepareStatement("INSERT INTO `Products` (`ProductID`, `ProductCode`, `ProductType`, `ProductName`, `TimeMovie`, `AddressID`, `SeatNumber`, `EventStart`, `EventEnd`, `ProductPrice`) VALUES (013, 'fp12', 'M', 'Movie', '2018-10-5 18:00', 027, '3A', NULL, NULL, 13.50);");
+		ps.setString(1, ProductID);
+		ps.setString(2, productCode);
+		ps.setString(3, seasonStartDate);
+		ps.setString(4, seasonEndDate);
+		ps.setDouble(5, cost);
+		ps.executeUpdate();
+		ps.executeUpdate();
+		
+		rs.close();
+		ps.close();
+	} catch (Exception e) {
+		e.printStackTrace();
+	}
+}
 	/**
 	 * 8. Adds a ParkingPass record to the database with the provided data.
 	 */
 	//INSERT INTO `Products` (`ProductID`, `ProductCode`, `ProductType`, `ProductName`, `TimeMovie`, `AddressID`, `SeatNumber`, `EventStart`, `EventEnd`, `ProductPrice`) VALUES (015, '90fa', 'P', NULL, NULL, NULL, NULL, NULL, NULL, 12.00);
-	public static void addParkingPass(String productCode, double parkingFee) {}
+	public static void addParkingPass(String ProductID, String productCode, double parkingFee) {
+	try {
+		Connection conn = dbConnection.getConnection(); 
+		PreparedStatement ps = conn.prepareStatement("SELECT ProductID FROM Product WHERE ProductType = P");
+		ps.setInt(1,  Integer.parseInt(ProductID));
+		ResultSet rs = ps.executeQuery();
+		int product;
+		if(rs.next()) {
+			product = rs.getInt("product");
+		} else {
+			ps = conn.prepareStatement("INSERT INTO Product (ProductID) VALUES (?)");
+			ps.setInt(1, Integer.parseInt(ProductID));
+			rs = ps.executeQuery();
+			
+			ps = conn.prepareStatement("SELECT ProductID FROM Product WHERE ProductCode = ?");
+			ps.setInt(1, Integer.parseInt(ProductID));
+			rs = ps.executeQuery();
+			rs.next();
+			product = rs.getInt("product");
+		}
+		ps = conn.prepareStatement("SELECT ProductID FROM Product WHERE ProductType = ?");
+		ps.setInt(1, Integer.parseInt(ProductID));
+		rs = ps.executeQuery();
 
+		ps = conn.prepareStatement("INSERT INTO `Products` (`ProductID`, `ProductCode`, `ProductType`, `ProductName`, `TimeMovie`, `AddressID`, `SeatNumber`, `EventStart`, `EventEnd`, `ProductPrice`) VALUES (013, 'fp12', 'M', 'Movie', '2018-10-5 18:00', 027, '3A', NULL, NULL, 13.50);");
+		ps.setString(1, ProductID);
+		ps.setString(2, productCode);
+		ps.setDouble(3, parkingFee);
+		ps.executeUpdate();
+		ps.executeUpdate();
+		
+		rs.close();
+		ps.close();
+	} catch (Exception e) {
+		e.printStackTrace();
+	}
+}
 	/**
 	 * 9. Adds a refreshment record to the database with the provided data.
 	 */
 	//INSERT INTO `Products` (`ProductID`, `ProductCode`, `ProductType`, `ProductName`, `TimeMovie`, `AddressID`, `SeatNumber`, `EventStart`, `EventEnd`, `ProductPrice`) VALUES (015, '32f4', 'R', 'Refreshment', NULL, NULL, NULL, NULL, NULL, 1.50);
-	public static void addRefreshment(String productCode, String name, double cost) {}
+	public static void addRefreshment(String ProductID, String productCode, String name, double cost) {
+	try {
+		Connection conn = dbConnection.getConnection(); 
+		PreparedStatement ps = conn.prepareStatement("SELECT ProductID FROM Product WHERE ProductType = R");
+		ps.setInt(1,  Integer.parseInt(ProductID));
+		ResultSet rs = ps.executeQuery();
+		int product;
+		if(rs.next()) {
+			product = rs.getInt("product");
+		} else {
+			ps = conn.prepareStatement("INSERT INTO Product (ProductID) VALUES (?)");
+			ps.setInt(1, Integer.parseInt(ProductID));
+			rs = ps.executeQuery();
+			
+			ps = conn.prepareStatement("SELECT ProductID FROM Product WHERE ProductCode = ?");
+			ps.setInt(1, Integer.parseInt(ProductID));
+			rs = ps.executeQuery();
+			rs.next();
+			product = rs.getInt("product");
+		}
+		ps = conn.prepareStatement("SELECT ProductID FROM Product WHERE ProductType = ?");
+		ps.setInt(1, Integer.parseInt(ProductID));
+		rs = ps.executeQuery();
 
+		ps = conn.prepareStatement("INSERT INTO `Products` (`ProductID`, `ProductCode`, `ProductType`, `ProductName`, `TimeMovie`, `AddressID`, `SeatNumber`, `EventStart`, `EventEnd`, `ProductPrice`) VALUES (013, 'fp12', 'M', 'Movie', '2018-10-5 18:00', 027, '3A', NULL, NULL, 13.50);");
+		ps.setString(1, ProductID);
+		ps.setString(2, productCode);
+		ps.setString(3, name);
+		ps.setDouble(11, cost);
+		ps.executeUpdate();
+		ps.executeUpdate();
+		
+		rs.close();
+		ps.close();
+	} catch (Exception e) {
+		e.printStackTrace();
+	}
+}
 	/**
 	 * 10. Removes all invoice records from the database
 	 */
