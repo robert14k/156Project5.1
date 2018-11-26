@@ -254,7 +254,7 @@ public class InvoiceData {
 				ps.setInt(1, Integer.parseInt(ProductID));
 				rs = ps.executeQuery();
 
-				ps = conn.prepareStatement("INSERT INTO `Products` (`ProductID`, `ProductCode`, `ProductType`, `ProductName`, `TimeMovie`, `AddressID`, `SeatNumber`, `EventStart`, `EventEnd`, `ProductPrice`) VALUES (013, 'fp12', 'M', 'Movie', '2018-10-5 18:00', 027, '3A', NULL, NULL, 13.50);");
+				ps = conn.prepareStatement("INSERT INTO `Products` (`ProductID`, `ProductCode`, `ProductType`, `ProductName`, `TimeMovie`, `AddressID`, `SeatNumber`, `EventStart`, `EventEnd`, `ProductPrice`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);");
 				ps.setString(1, ProductID);
 				ps.setString(2, productCode);
 				ps.setString(3, dateTime);
@@ -303,7 +303,7 @@ public class InvoiceData {
 		ps.setInt(1, Integer.parseInt(ProductID));
 		rs = ps.executeQuery();
 
-		ps = conn.prepareStatement("INSERT INTO `Products` (`ProductID`, `ProductCode`, `ProductType`, `ProductName`, `TimeMovie`, `AddressID`, `SeatNumber`, `EventStart`, `EventEnd`, `ProductPrice`) VALUES (013, 'fp12', 'M', 'Movie', '2018-10-5 18:00', 027, '3A', NULL, NULL, 13.50);");
+		ps = conn.prepareStatement("INSERT INTO `Products` (`ProductID`, `ProductCode`, `ProductType`, `ProductName`, `TimeMovie`, `AddressID`, `SeatNumber`, `EventStart`, `EventEnd`, `ProductPrice`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);");
 		ps.setString(1, ProductID);
 		ps.setString(2, productCode);
 		ps.setString(3, seasonStartDate);
@@ -346,7 +346,7 @@ public class InvoiceData {
 		ps.setInt(1, Integer.parseInt(ProductID));
 		rs = ps.executeQuery();
 
-		ps = conn.prepareStatement("INSERT INTO `Products` (`ProductID`, `ProductCode`, `ProductType`, `ProductName`, `TimeMovie`, `AddressID`, `SeatNumber`, `EventStart`, `EventEnd`, `ProductPrice`) VALUES (013, 'fp12', 'M', 'Movie', '2018-10-5 18:00', 027, '3A', NULL, NULL, 13.50);");
+		ps = conn.prepareStatement("INSERT INTO `Products` (`ProductID`, `ProductCode`, `ProductType`, `ProductName`, `TimeMovie`, `AddressID`, `SeatNumber`, `EventStart`, `EventEnd`, `ProductPrice`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);");
 		ps.setString(1, ProductID);
 		ps.setString(2, productCode);
 		ps.setDouble(3, parkingFee);
@@ -387,7 +387,7 @@ public class InvoiceData {
 		ps.setInt(1, Integer.parseInt(ProductID));
 		rs = ps.executeQuery();
 
-		ps = conn.prepareStatement("INSERT INTO `Products` (`ProductID`, `ProductCode`, `ProductType`, `ProductName`, `TimeMovie`, `AddressID`, `SeatNumber`, `EventStart`, `EventEnd`, `ProductPrice`) VALUES (013, 'fp12', 'M', 'Movie', '2018-10-5 18:00', 027, '3A', NULL, NULL, 13.50);");
+		ps = conn.prepareStatement("INSERT INTO `Products` (`ProductID`, `ProductCode`, `ProductType`, `ProductName`, `TimeMovie`, `AddressID`, `SeatNumber`, `EventStart`, `EventEnd`, `ProductPrice`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);");
 		ps.setString(1, ProductID);
 		ps.setString(2, productCode);
 		ps.setString(3, name);
