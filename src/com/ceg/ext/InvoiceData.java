@@ -212,7 +212,7 @@ public class InvoiceData {
 			if(rs.next()) {
 				product = rs.getInt("product");
 			} else {
-				ps = conn.prepareStatement("Delete from Product");
+				ps = conn.prepareStatement("Delete from Products");
 				//ps.setInt(1, Integer.parseInt(ProductID));
 				rs = ps.executeQuery();
 				ps.executeUpdate();
@@ -433,7 +433,9 @@ public class InvoiceData {
 	 * 11. Adds an invoice record to the database with the given data.
 	 */
 	//INSERT INTO `Invoice` (`InvoiceID`, `CustomerID`, `InvoiceDate`) VALUES (005, 001, '2018-11-21');
-	public static void addInvoice(String invoiceCode, String customerCode, String salesPersonCode, String invoiceDate) {}
+	public static void addInvoice(String invoiceCode, String customerCode, String salesPersonCode, String invoiceDate) {
+		
+	}
 
 	/**
 	 * 12. Adds a particular movieticket (corresponding to <code>productCode</code>
