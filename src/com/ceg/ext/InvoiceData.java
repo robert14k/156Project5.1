@@ -172,18 +172,18 @@ public class InvoiceData {
 	 * 4. Method that removes every customer record from the database
 	 */
 	// DELETE FROM CUSTOMERS WHERE CUSTOMERID <> NULL;
-	public static void removeAllCustomers(String CustomerID) {
+	public static void removeAllCustomers() {
 		try {
 			Connection conn = dbConnection.getConnection();
 			PreparedStatement ps = conn.prepareStatement("SELECT PersonID FROM Person");
-			ps.setInt(1, Integer.parseInt(CustomerID));
+			//ps.setInt(1, Integer.parseInt(CustomerID));
 			ResultSet rs = ps.executeQuery();
 			int customer;
 			if(rs.next()) {
 				customer = rs.getInt("customer");
 			} else {
 				ps = conn.prepareStatement("Delete from Customer");
-				ps.setInt(1, Integer.parseInt(CustomerID));
+				//ps.setInt(1, Integer.parseInt(CustomerID));
 				rs = ps.executeQuery();
 				ps.executeUpdate();
 				
@@ -202,18 +202,18 @@ public class InvoiceData {
 	 * 5. Removes all product records from the database
 	 */
 	//DEELTE FROM PRODUCTS WHERE PRODUCTID <> NULL;
-	public static void removeAllProducts( String ProductID) {
+	public static void removeAllProducts() {
 		try {
 			Connection conn = dbConnection.getConnection();
 			PreparedStatement ps = conn.prepareStatement("SELECT PersonID FROM Person");
-			ps.setInt(1, Integer.parseInt(ProductID));
+			//ps.setInt(1, Integer.parseInt(ProductID));
 			ResultSet rs = ps.executeQuery();
 			int product;
 			if(rs.next()) {
 				product = rs.getInt("product");
 			} else {
 				ps = conn.prepareStatement("Delete from Product");
-				ps.setInt(1, Integer.parseInt(ProductID));
+				//ps.setInt(1, Integer.parseInt(ProductID));
 				rs = ps.executeQuery();
 				ps.executeUpdate();
 				
@@ -297,18 +297,18 @@ public class InvoiceData {
 	 * 10. Removes all invoice records from the database
 	 */
 	// REMOVE FROM INVOICE WHERE INVOICEID <> NULL;
-	public static void removeAllInvoices(String InvoiceID) {
+	public static void removeAllInvoices() {
 	try {
 		Connection conn = dbConnection.getConnection();
 		PreparedStatement ps = conn.prepareStatement("SELECT InvoiceID FROM Invoice");
-		ps.setInt(1, Integer.parseInt(InvoiceID));
+		//ps.setInt(1, Integer.parseInt(InvoiceID));
 		ResultSet rs = ps.executeQuery();
 		int invoice;
 		if(rs.next()) {
 			invoice = rs.getInt("invoice");
 		} else {
 			ps = conn.prepareStatement("Delete from Invoice");
-			ps.setInt(1, Integer.parseInt(InvoiceID));
+			//ps.setInt(1, Integer.parseInt(InvoiceID));
 			rs = ps.executeQuery();
 			ps.executeUpdate();
 			
