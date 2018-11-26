@@ -182,7 +182,7 @@ public class InvoiceData {
 			if(rs.next()) {
 				customer = rs.getInt("customer");
 			} else {
-				ps = conn.prepareStatement("Delete from Customer CustomerID");
+				ps = conn.prepareStatement("Delete from Customer");
 				ps.setInt(1, Integer.parseInt(CustomerID));
 				rs = ps.executeQuery();
 				ps.executeUpdate();
@@ -212,7 +212,7 @@ public class InvoiceData {
 			if(rs.next()) {
 				product = rs.getInt("product");
 			} else {
-				ps = conn.prepareStatement("Delete from Product ProductID");
+				ps = conn.prepareStatement("Delete from Product");
 				ps.setInt(1, Integer.parseInt(ProductID));
 				rs = ps.executeQuery();
 				ps.executeUpdate();
@@ -230,8 +230,47 @@ public class InvoiceData {
 	 * 6. Adds an movieTicket record to the database with the provided data.
 	 */
 	//INSERT INTO `Products` (`ProductID`, `ProductCode`, `ProductType`, `ProductName`, `TimeMovie`, `AddressID`, `SeatNumber`, `EventStart`, `EventEnd`, `ProductPrice`) VALUES (013, 'fp12', 'M', 'Movie', '2018-10-5 18:00', 027, '3A', NULL, NULL, 13.50);
-	public static void addMovieTicket(String productCode, String dateTime, String movieName, String street, String city,String state, String zip, String country, String screenNo, double pricePerUnit) {}
+	public static void addMovieTicket( String ProductID, String productCode, String dateTime, String movieName, String street, String city,String state, String zip, String country, String screenNo, double pricePerUnit) 
+		try {
+				Connection conn = dbConnection.getConnection(); 
+				PreparedStatement ps = conn.prepareStatement("SELECT ProductID FROM Product WHERE ProductType = M");
+				ps.setInt(1,  Integer.parseInt(ProductID));
+				ResultSet rs = ps.executeQuery();
+				int product;
+				if(rs.next()) {
+					product = rs.getInt("product");
+				} else {
+					ps = conn.prepareStatement("INSERT INTO Product (ProductID) VALUES (?)");
+					ps.setInt(1, Integer.parseInt(ProductID));
+					rs = ps.executeQuery();
+					
+					ps = conn.prepareStatement("SELECT ProductID FROM Product WHERE ProductCode = ?");
+					ps.setInt(1, Integer.parseInt(ProductID));
+					rs = ps.executeQuery();
+					rs.next();
+					product = rs.getInt("product");
+				}
+				ps = conn.prepareStatement("SELECT ProductID FROM Product WHERE ProductType = ?");
+				ps.setInt(1, Integer.parseInt(ProductID));
+				rs = ps.executeQuery();
 
+				ps = conn.prepareStatement("INSERT INTO `Products` (`ProductID`, `ProductCode`, `ProductType`, `ProductName`, `TimeMovie`, `AddressID`, `SeatNumber`, `EventStart`, `EventEnd`, `ProductPrice`) VALUES (013, 'fp12', 'M', 'Movie', '2018-10-5 18:00', 027, '3A', NULL, NULL, 13.50);");
+				ps.setString(1, ProductID);
+				ps.setString(2, productCode);
+				ps.setString(3, dateTime);
+				ps.setString(4, movieName);
+				ps.setString(5, street);
+				ps.setString(6, city);
+				ps.setString(7, state);
+				ps.setString(8, zip);
+				ps.setString(9, country);
+				ps.setString(10, screenNo);
+				ps.setDouble(11, pricePerUnit);
+				ps.executeUpdate();
+						
+		rs.close();
+		ps.close();
+    	} 
 	/**
 	 * 7. Adds a seasonPass record to the database with the provided data.
 	 */
