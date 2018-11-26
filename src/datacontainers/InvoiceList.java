@@ -38,6 +38,41 @@ public class InvoiceList {
     	}
 
     }
+    
+    public void add(Invoice t) {
+    	InvoiceListNode aNode = new InvoiceListNode(t);
+    	double aCost, iCost;
+    	aCost = t.getProductsSubtotal()-t.getProuductsDiscount(t.getProductsSubtotal());
+    	if(size == 0) {
+    		addToStart(t);
+    		return;
+    	}
+    	
+    	InvoiceListNode currentNode = start;
+    	for(int i=1; i<size; i++) {
+    		iCost = currentNode.getInvoice().getProductsSubtotal() - currentNode.getInvoice().getProuductsDiscount(currentNode.getInvoice().getProductsSubtotal());
+    		if(iCost <= aCost) {
+    			//add the invoice here 
+    			size++;
+    			if(currentNode == start) {
+    				addToStart(t);
+    				return;
+    			}else if(currentNode == end) {
+    				addToEnd(t);
+    				return;
+    			}
+    			InvoiceListNode previousNode = getInvoiceListNode(i-1);
+    			previousNode.setNext(aNode);
+    			aNode.setNext(currentNode);
+    			return;
+    		}else {
+    			//move currnet node to next 
+    			currentNode = currentNode.getNext();
+    		}
+    	}
+    	addToEnd(t);
+    	return;
+    }
 
     public void remove(int position) {
     	if(position == size && size == 1){
@@ -89,15 +124,6 @@ public class InvoiceList {
     	}
     	return headNode.getInvoice();
   	
-    }
-
-    public void print() {
-    	InvoiceListNode currentNode = start; 
-    	//System.out.println(currentNode.getInvoice().toString());
-    	while(currentNode != null){
-    		System.out.println(currentNode.getInvoice().toString());
-    		currentNode= currentNode.getNext();
-    	}
     }
 
 }
