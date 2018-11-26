@@ -110,7 +110,41 @@ public class InvoiceData {
 	 * @param email
 	 */
 	//INSERT INTO `Email` (`EmailID`, `PersonID`, `EmailAddress`) VALUES (031, 021, 'email@email.com');
-	public static void addEmail(String personCode, String email) {}
+	public static void addEmail(String personCode, String email, String EmailAddress) {
+		try {
+			Connection conn = dbConnection.getConnection();
+			PreparedStatement ps = conn.prepareStatement("SELECT EmailID FROM Email WHERE PersonCode = ?");
+			ps.setInt(1, Integer.parseInt(email));
+			ResultSet rs = ps.executeQuery();
+			int emailID, PersonID = 0;
+			if(rs.next()) {
+				emailID = rs.getInt("emailID");
+			} else {
+				ps = conn.prepareStatement("INSERT INTO Email (EmailID) VALUES (?)");
+				ps.setInt(1, Integer.parseInt(email));
+				rs = ps.executeQuery();
+				
+				ps = conn.prepareStatement("SELECT EmailID FROM Email WHERE PersonCode = ?");
+				ps.setInt(1, Integer.parseInt(email));
+				rs = ps.executeQuery();
+				rs.next();
+				emailID = rs.getInt("emailID");
+			}
+			ps = conn.prepareStatement("SELECT CountryID FROM Country WHERE Country = ?");
+			ps.setInt(1, Integer.parseInt(email));
+			rs = ps.executeQuery();
+
+			ps = conn.prepareStatement("INSERT INTO `Email` (`EmailID`, `PersonID`, `EmailAddress`) VALUES (031, 021, 'email@email.com');");
+			ps.setInt(1, emailID);
+			ps.setInt(2, PersonID);
+			ps.setString(3, EmailAddress);
+			ps.executeUpdate();
+    		rs.close();
+    		ps.close();
+    	} catch (Exception e) {
+    		e.printStackTrace();
+    	}
+	}
 
 	/**
 	 * 4. Method that removes every customer record from the database
