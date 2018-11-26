@@ -2,7 +2,6 @@ package datacontainers;
 
 public class InvoiceListNode {
 	
-	
 	private InvoiceListNode next;
 	private Invoice item;
 	

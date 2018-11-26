@@ -424,9 +424,9 @@ public class InvoiceData {
     		ps.close();
     	}
 	}
-		catch (Exception e) {
-    		e.printStackTrace();
-    	}
+	catch (Exception e) {
+    	e.printStackTrace();
+    }
 }
 
 	/**
