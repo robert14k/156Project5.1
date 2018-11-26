@@ -297,7 +297,9 @@ public class InvoiceData {
 	 * 10. Removes all invoice records from the database
 	 */
 	// REMOVE FROM INVOICE WHERE INVOICEID <> NULL;
+	//public static void removeAllInvoices()
 	public static void removeAllInvoices(String InvoiceID) {
+		//this cant be here!!!!!!---------------^^^^^^^^^
 	try {
 		Connection conn = dbConnection.getConnection();
 		PreparedStatement ps = conn.prepareStatement("SELECT InvoiceID FROM Invoice");
