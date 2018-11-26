@@ -20,10 +20,32 @@ public class InvoiceData {
 	/**
 	 * 1. Method that removes every person record from the database
 	 */
-	public static void removeAllPersons() {
+	public static void removeAllPersons(String PersonID) {
+		try {
+			Connection conn = dbConnection.getConnection();
+			PreparedStatement ps = conn.prepareStatement("SELECT PersonID FROM Person");
+			ps.setInt(1, Integer.parseInt(PersonID));
+			ResultSet rs = ps.executeQuery();
+			int person;
+			if(rs.next()) {
+				person = rs.getInt("person");
+			} else {
+				ps = conn.prepareStatement("Delete from Person PersonID");
+				ps.setInt(1, Integer.parseInt(PersonID));
+				rs = ps.executeQuery();
+				ps.executeUpdate();
+				
+	    		rs.close();
+	    		ps.close();
+	    	} 
+		}
+			catch (Exception e) {
+	    		e.printStackTrace();
+	    	}
+	}
+				
 		//DELETE FROM PERSON WHERE PersonID is not null
 		//DELETE FROM PERSON WHERE PERSONID <> NULL;
-	}
 
 	/**
 	 * 2. Method to add a person record to the database with the provided data.
@@ -150,7 +172,29 @@ public class InvoiceData {
 	 * 4. Method that removes every customer record from the database
 	 */
 	// DELETE FROM CUSTOMERS WHERE CUSTOMERID <> NULL;
-	public static void removeAllCustomers() {}
+	public static void removeAllCustomers(String CustomerID) {
+		try {
+			Connection conn = dbConnection.getConnection();
+			PreparedStatement ps = conn.prepareStatement("SELECT PersonID FROM Person");
+			ps.setInt(1, Integer.parseInt(CustomerID));
+			ResultSet rs = ps.executeQuery();
+			int customer;
+			if(rs.next()) {
+				customer = rs.getInt("customer");
+			} else {
+				ps = conn.prepareStatement("Delete from Customer CustomerID");
+				ps.setInt(1, Integer.parseInt(CustomerID));
+				rs = ps.executeQuery();
+				ps.executeUpdate();
+				
+	    		rs.close();
+	    		ps.close();
+	    	} 
+		}
+			catch (Exception e) {
+	    		e.printStackTrace();
+	    	}
+	}
 
 	public static void addCustomer(String customerCode, String customerType, String primaryContactPersonCode,String name, String street, String city, String state, String zip, String country) {}
 	
@@ -158,7 +202,29 @@ public class InvoiceData {
 	 * 5. Removes all product records from the database
 	 */
 	//DEELTE FROM PRODUCTS WHERE PRODUCTID <> NULL;
-	public static void removeAllProducts() {}
+	public static void removeAllProducts( String ProductID) {
+		try {
+			Connection conn = dbConnection.getConnection();
+			PreparedStatement ps = conn.prepareStatement("SELECT PersonID FROM Person");
+			ps.setInt(1, Integer.parseInt(ProductID));
+			ResultSet rs = ps.executeQuery();
+			int product;
+			if(rs.next()) {
+				product = rs.getInt("product");
+			} else {
+				ps = conn.prepareStatement("Delete from Product ProductID");
+				ps.setInt(1, Integer.parseInt(ProductID));
+				rs = ps.executeQuery();
+				ps.executeUpdate();
+				
+	    		rs.close();
+	    		ps.close();
+	    	} 
+		}
+			catch (Exception e) {
+	    		e.printStackTrace();
+	    	}
+	}
 
 	/**
 	 * 6. Adds an movieTicket record to the database with the provided data.
