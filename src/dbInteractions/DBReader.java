@@ -15,6 +15,7 @@ import datacontainers.Address;
 import datacontainers.Customer;
 import datacontainers.General;
 import datacontainers.Invoice;
+import datacontainers.InvoiceList;
 import datacontainers.MovieTicket;
 import datacontainers.ParkingPass;
 import datacontainers.Person;
@@ -37,7 +38,7 @@ public class DBReader {
 		String personQuery = "SELECT * FROM Person;";
 		ArrayList<Person> people= new ArrayList<Person>();
 		Person p;
-		String id, first, last;
+		String code, first, last;
 		int addressCode;
 		Address a;
 		try
@@ -46,12 +47,12 @@ public class DBReader {
 			rs = ps.executeQuery();
 			while(rs.next()){
 				
-				id = rs.getString("PersonID");
+				code = rs.getString("PersonCode");
 				first = rs.getString("PersonFirstName");
 				last = rs.getString("PersonLastName");
 				addressCode = rs.getInt("AddressID");
 				a = getAddress(addressCode);
-				p = new Person(id, first, last, a);
+				p = new Person(code, first, last, a);
 				people.add(p);
 			}
 			rs.close();
@@ -89,7 +90,7 @@ public class DBReader {
 			city = rs.getString("City");
 			country = rs.getString("Country");
 			state = rs.getString("State");
-			zip = Integer.toString(rs.getInt("ZipCode"));
+			zip = rs.getString("ZipCode");
 			a = new Address(street, city, state, zip, country);
 			
 			rs.close();
@@ -127,12 +128,12 @@ public class DBReader {
 				
 		
 			while(rs.next()) {
-				customerCode = rs.getString("CustomerID");
+				customerCode = rs.getString("CustomerCode");
 				name = rs.getString("CompanyName");
 				a = getAddress(rs.getInt("AddressID"));
 				contact = getPerson(rs.getInt("PersonID"));
 
-				if(rs.getString("CustomerType").equals("S")){
+				if(rs.getString("CustomerType").equals("Student")){
 					c = new Student(customerCode, contact, name, a);
 				}else {
 					c = new General(customerCode, contact, name, a);
@@ -265,9 +266,9 @@ public class DBReader {
 	
 	
 	
-	public ArrayList<Invoice> getInvoice(List<Person> people, List<Product> products, List<Customer> customers){
+	public InvoiceList getInvoice(List<Person> people, List<Product> products, List<Customer> customers){
 	
-		ArrayList<Invoice> invoiceList = new ArrayList<Invoice>();
+		InvoiceList invoiceList = new InvoiceList();
 		ArrayList<Product> invoiceProducts = null;
 		//this will need to be ahcne to the linked list once tim is done with it!***********************^^^^^^^^^^^^^^^^^
 		Connection conn = dbConnection.getConnection();
@@ -292,7 +293,7 @@ public class DBReader {
 				invoiceProducts = getInvoiceProducts(invoiceID, products);
 				DateTimeFormatter formatter = DateTimeFormat.forPattern("yyyy-mm-dd");
 				invoiceTime = formatter.parseDateTime(rs.getString("InvoiceDate"));
-				ps = conn.prepareStatement("SELECT * FROM Customer WHERE CustomerID = ?");
+				ps = conn.prepareStatement("SELECT CustomerCode FROM Customer WHERE CustomerID = ?");
 				ps.setInt(1, customerID);
 				rs2 = ps.executeQuery();
 				rs2.next();
@@ -364,7 +365,7 @@ public class DBReader {
 					double price = rs2.getDouble("ProductPrice");
 					
 					MovieTicket ticket = new MovieTicket(productCode, movieTime, name, a, screenNo, price);
-					ticket.setAmount(rs3.getInt("QuanitityOne"));
+					ticket.setAmount(rs3.getInt("QuantityOne"));
 					productList.add(ticket);
 					
 					
@@ -373,7 +374,7 @@ public class DBReader {
 					double price = rs2.getDouble("ProductPrice");
 					
 					Refreshment refreshment = new Refreshment(productCode, name, price);
-					refreshment.setAmount(rs3.getInt("QuanitityOne"));
+					refreshment.setAmount(rs3.getInt("QuantityOne"));
 					if(rs3.getString("SubProduct") != null) {
 						refreshment.isWithTicket();
 					}
@@ -393,15 +394,15 @@ public class DBReader {
 				}else{
 					double price = rs2.getDouble("ProductPrice");
 					ParkingPass parkingPass = new ParkingPass(productCode, price);
-					parkingPass.setAmount(rs3.getInt("QuanitityOne"));
+					parkingPass.setAmount(rs3.getInt("QuantityOne"));
 					if((subCode = rs3.getString("SubProduct")) != null) {
 						parkingPass.isWithTicket();
 						//parkingPass.setAmount(FlatFileReader.codeGetProduct(subCode, products).getAmount());
-						ps = conn.prepareStatement("SELECT QuanityOne FROM InvoiceProduct AS ip JOIN Products AS p ON ip.ProductID=p.ProductID WHERE p.ProductCode = ?");
+						ps = conn.prepareStatement("SELECT QuantityOne FROM InvoiceProduct AS ip JOIN Products AS p ON ip.ProductID=p.ProductID WHERE p.ProductCode = ?");
 						ps.setString(1, subCode);
 						rs4 = ps.executeQuery();
 						rs4.next();
-						parkingPass.setAmount(rs4.getInt("QuanitytOne"));
+						parkingPass.setAmount(rs4.getInt("QuantityOne"));
 						rs4.close();
 						
 					}

@@ -14,7 +14,15 @@ public class Customer {
 		this.name = name;
 		this.address = address;
 	}
-
+	
+	public Customer(Customer old) {
+		super();
+		this.customerCode = old.customerCode;
+		this.contact = old.contact;
+		this.name = old.name;
+		this.address = old.address;
+	}
+	
 	public String getCustomerCode() {
 		return this.customerCode;
 	}

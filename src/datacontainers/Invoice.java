@@ -36,7 +36,7 @@ public class Invoice {
 		this.invoiceDate = invoiceDate;
 	}
 	public Customer getCustomer() {
-		return customer;
+		return this.customer;
 	}
 	public void setCustomer(Customer customer) {
 		this.customer = customer;

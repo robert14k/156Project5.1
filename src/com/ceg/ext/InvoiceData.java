@@ -78,34 +78,35 @@ public class InvoiceData {
 		Connection conn = dbConnection.getConnection();
 		try {
 			PreparedStatement ps = conn.prepareStatement("SELECT ZipID FROM Zip WHERE ZipCode = ?");
-			ps.setInt(1, Integer.parseInt(zip));
+			ps.setString(1, zip);
 			ResultSet rs = ps.executeQuery();
 			int zipID, countryID;
 			if(rs.next()) {
 				zipID = rs.getInt("ZipID");
 			} else {
 				ps = conn.prepareStatement("INSERT INTO Zip (ZipCode) VALUES (?)");
-				ps.setInt(1, Integer.parseInt(zip));
-				rs = ps.executeQuery();
+				ps.setString(1, zip);
+				ps.executeUpdate();
 
 				ps = conn.prepareStatement("SELECT ZipID FROM Zip WHERE ZipCode = ?");
-				ps.setInt(1, Integer.parseInt(zip));
+				ps.setString(1, zip);
 				rs = ps.executeQuery();
 				rs.next();
 				zipID = rs.getInt("ZipID");
 			}
 			ps = conn.prepareStatement("SELECT CountryID FROM Country WHERE Country = ?");
-			ps.setInt(1, Integer.parseInt(zip));
+			ps.setString(1, country);
 			rs = ps.executeQuery();
 			if(rs.next()) {
 				countryID = rs.getInt("CountryID");
 			} else {
 				ps = conn.prepareStatement("INSERT INTO Country (Country) VALUES (?)");
 				ps.setString(1, country);
-				rs = ps.executeQuery();
+				ps.executeUpdate();
 				ps = conn.prepareStatement("SELECT CountryID FROM Country WHERE Country = ?");
 				ps.setString(1, country);
 				rs = ps.executeQuery();
+				rs.next();
 				countryID = rs.getInt("CountryID");
 			}
 			ps = conn.prepareStatement("INSERT INTO `Address` (`Address`, `City`, `State`, `ZipID`, `CountryID`) VALUES (?, ?, ?, ?, ?)");
@@ -117,10 +118,11 @@ public class InvoiceData {
 			ps.executeUpdate();
 
 			//get the address ID so I can add it to the person comit to the db
-			ps = conn.prepareStatement("SELECT CountryID FROM Country WHERE Country = ?");
-			ps.setString(1, state);
+			ps = conn.prepareStatement("SELECT AddressID FROM Address WHERE Address = ?");
+			ps.setString(1, street);
 			rs = ps.executeQuery();
-			int addressID = rs.getInt("CountryID");
+			rs.next();
+			int addressID = rs.getInt("AddressID");
 
 			ps = conn.prepareStatement("INSERT INTO `Person` (PersonLastName, PersonFirstName, AddressID, PersonCode ) VALUES (?, ?, ?, ?)");
 			ps.setString(1, lastName);
@@ -159,6 +161,7 @@ public class InvoiceData {
 			PreparedStatement ps = conn.prepareStatement("SELECT PersonID FROM Person WHERE PersonCode = ?");
 			ps.setString(1, personCode);
 			ResultSet rs = ps.executeQuery();
+			rs.next();
 			int personID = rs.getInt("PersonID");
 			ps = conn.prepareStatement("INSERT INTO Email (PersonID, EmailAddress) VALUES (?, ?)");
 			ps.setInt(1, personID);
@@ -428,13 +431,13 @@ public class InvoiceData {
 			int id;
 			while (rs.next()) {
 				id = rs.getInt("InvoiceID");
-				ps = conn.prepareStatement("DELETE FROM InvoiceProduct WHERE InvoiecID = ?");
+				ps = conn.prepareStatement("DELETE FROM InvoiceProduct WHERE InvoiceID = ?");
 				ps.setInt(1, id);
 				ps.executeUpdate();
 				
 			}
 			
-			ps = conn.prepareStatement("DELETE FROM Person");
+			ps = conn.prepareStatement("DELETE FROM Invoice");
 			ps.executeUpdate();
 	    	rs.close();
 	    	ps.close();
@@ -679,24 +682,24 @@ public class InvoiceData {
     	Connection conn = dbConnection.getConnection();
     	try {
 			
-			PreparedStatement ps = conn.prepareStatement("SELECT ZipID from Person WHERE ZipCode = ?");
-			ps.setInt(1, Integer.parseInt(zip));
+			PreparedStatement ps = conn.prepareStatement("SELECT ZipID from Zip WHERE ZipCode = ?");
+			ps.setString(1, zip);
 			ResultSet rs = ps.executeQuery();
 			int zipID, countryID;
 			if(rs.next()) {
 				zipID = rs.getInt("ZipID");
 			}else {
 				ps = conn.prepareStatement("INSERT INTO Zip (ZipCode) Values(?)");
-				ps.setInt(1, Integer.parseInt(zip));
+				ps.setString(1, zip);
 				ps.executeUpdate();
-				ps = conn.prepareStatement("SELECT ZipID from Person WHERE ZipCode = ?");
-				ps.setInt(1, Integer.parseInt(zip));
+				ps = conn.prepareStatement("SELECT ZipID from Zip WHERE ZipCode = ?");
+				ps.setString(1, zip);
 				rs = ps.executeQuery();
 				rs.next();
 				zipID = rs.getInt("ZipID");
 			}
 			
-			ps = conn.prepareStatement("SELECT CountryID from Person WHERE Country = ?");
+			ps = conn.prepareStatement("SELECT CountryID from Country WHERE Country = ?");
 			ps.setString(1, country);
 			rs = ps.executeQuery();
 			if(rs.next()) {
@@ -705,7 +708,7 @@ public class InvoiceData {
 				ps = conn.prepareStatement("INSERT INTO Country (Country) Values(?)");
 				ps.setString(1, country);
 				ps.executeUpdate();
-				ps = conn.prepareStatement("SELECT CountryID from Person WHERE Country = ?");
+				ps = conn.prepareStatement("SELECT CountryID from Country WHERE Country = ?");
 				ps.setString(1, country);
 				rs = ps.executeQuery();
 				rs.next();
@@ -721,7 +724,7 @@ public class InvoiceData {
 			
 			ps = conn.prepareStatement("SELECT AddressID from Address WHERE Address = ?");
 			ps.setString(1, street);
-			ps.executeQuery();
+			rs = ps.executeQuery();
 			rs.next();
 			addressID = rs.getInt("AddressID");
 			

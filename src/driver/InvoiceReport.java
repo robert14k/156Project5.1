@@ -6,6 +6,7 @@ import java.util.List;
 import consoleWriter.ConsoleWriter;
 import datacontainers.Customer;
 import datacontainers.Invoice;
+import datacontainers.InvoiceList;
 import datacontainers.Person;
 import datacontainers.Product;
 import dbInteractions.DBReader;
@@ -29,7 +30,7 @@ public class InvoiceReport {
 		List<Product> productList = dbr.getProducts();
 		
 		//List<Invoice> invoiceList = fr.readInvoice(personList, productList, customerList);
-		List<Invoice> invoiceList = dbr.getInvoice(personList, productList, customerList);
+		InvoiceList invoiceList = dbr.getInvoice(personList, productList, customerList);
 		
 		ConsoleWriter cw = new ConsoleWriter();
 		
