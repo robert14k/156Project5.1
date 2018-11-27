@@ -292,15 +292,16 @@ public class DBReader {
 				invoiceProducts = getInvoiceProducts(invoiceID, products);
 				DateTimeFormatter formatter = DateTimeFormat.forPattern("yyyy-mm-dd");
 				invoiceTime = formatter.parseDateTime(rs.getString("InvoiceDate"));
-				ps = conn.prepareStatement("SELECT CustomerCode FROM Customer WHERE CustomerID = ?");
+				ps = conn.prepareStatement("SELECT * FROM Customer WHERE CustomerID = ?");
 				ps.setInt(1, customerID);
 				rs2 = ps.executeQuery();
+				rs2.next();
 				customerCode = rs2.getString("CustomerCode");
-				System.out.println(customerCode);
 				customer = FlatFileReader.codeGetCustomer(customerCode, customers);
 				ps = conn.prepareStatement("SELECT PersonCode FROM Person WHERE PersonID = ?");
 				ps.setInt(1, salesPersonID);
 				rs3 = ps.executeQuery();
+				rs3.next();
 				sp = FlatFileReader.codeGetPerson(rs3.getString("PersonCode"), people);
 				
 				//still need to find person and cusomter, then this will be done excpet ofr the fany stuff in the getinvoiceproducts that deasl with the weird buisness rules and the withmovie or not
@@ -343,10 +344,12 @@ public class DBReader {
 				ps = conn.prepareStatement("SELECT * FROM Products WHERE ProductID = ?");
 				ps.setInt(1, rs.getInt("ProductID"));
 				rs2 = ps.executeQuery();
+				rs2.next();
 				productCode = rs2.getString("ProductCode");
 				ps = conn.prepareStatement("SELECT * FROM InvoiceProduct WHERE ProductID = ?");
 				ps.setInt(1, rs.getInt("ProductID"));
 				rs3 = ps.executeQuery();
+				rs3.next();
 				String subCode;
 				
 				if(rs2.getString("ProductType").equals("M")) {
@@ -384,7 +387,7 @@ public class DBReader {
 					double price = rs2.getDouble("ProductPrice");
 					
 					SeasonPass seasonPass= new SeasonPass(productCode, name, startTime, endTime, price);
-					seasonPass.setAmount(rs3.getInt("QuanitityOne"));
+					seasonPass.setAmount(rs3.getInt("QuantityOne"));
 					productList.add(seasonPass);
 					
 				}else{
@@ -397,6 +400,7 @@ public class DBReader {
 						ps = conn.prepareStatement("SELECT QuanityOne FROM InvoiceProduct AS ip JOIN Products AS p ON ip.ProductID=p.ProductID WHERE p.ProductCode = ?");
 						ps.setString(1, subCode);
 						rs4 = ps.executeQuery();
+						rs4.next();
 						parkingPass.setAmount(rs4.getInt("QuanitytOne"));
 						rs4.close();
 						
